@@ -1,11 +1,11 @@
-import express, { Application, Request, Response } from "express";
-import Stripe from "stripe";
-const app: Application = express();
+const express = require("express");
+const Stripe = require("stripe");
+const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-app.post("/checkout", async (req: Request, res: Response) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+app.post("/checkout", async (req, res) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const body = await req.body;
   const session = await stripe.checkout.sessions.create({
     line_items: [
@@ -22,25 +22,25 @@ app.post("/checkout", async (req: Request, res: Response) => {
 });
 
 app.get("/getPrice", async (req, res) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  const productName = decodeURIComponent((req.query.name as string) || "");
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const productName = decodeURIComponent((req.query.name || ""));
   const products = await stripe.products.list();
   const product = products.data.find((o) => o.name === productName);
   if (!product) {
     res.status(404).json({ error: "Product not found" });
   }
-  if (!product!.default_price) {
+  if (!product.default_price) {
     res.status(404).json({ error: "Price not found" });
   }
-  const price = await stripe.prices.retrieve(product!.default_price as string);
+  const price = await stripe.prices.retrieve(product.default_price);
   res.json({
     price_in_cents: price.unit_amount,
     price_id: price.id,
   });
 });
 
-app.get("/getProducts", async (req: Request, res: Response) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+app.get("/getProducts", async (req, res) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const products = await stripe.products.list();
   res.json(products);
 });
