@@ -25,12 +25,13 @@ app.post("/checkout", async (req, res) => {
     success_url: `https://homehaven-liard.vercel.app`,
     cancel_url: `https://homehaven-liard.vercel.app`,
   });
-  res.json(session.url);
+  res.json({ url: session.url });
 });
 
 app.get("/getPrice", async (req, res) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-  const productName = decodeURIComponent(req.query.name);
+  const params = req.query;
+  const productName = decodeURIComponent(params.name);
   try {
     const products = await stripe.products.list();
     const product = products.data.find((o) => o.name === productName);
