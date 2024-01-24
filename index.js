@@ -23,8 +23,8 @@ app.post("/checkout", async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: `https://homehaven-liard.vercel.app`,
-    cancel_url: `https://homehaven-liard.vercel.app`,
+    success_url: body.success_url,
+    cancel_url: body.cancel_url,
   });
   res.json({ url: session.url });
 });
