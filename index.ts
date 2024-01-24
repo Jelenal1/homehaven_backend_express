@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import Stripe from "stripe";
 const app: Application = express();
 app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
 app.post("/checkout", async (req: Request, res: Response) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -42,4 +43,8 @@ app.get("/getProducts", async (req: Request, res: Response) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const products = await stripe.products.list();
   res.json(products);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
