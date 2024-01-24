@@ -1,5 +1,6 @@
 import express from "express";
 import Stripe from "stripe";
+import cors from "cors";
 const app = express();
 app.use(express.json());
 app.use(
