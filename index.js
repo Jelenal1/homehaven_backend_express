@@ -6,7 +6,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "*",
+    preflightContinue: true,
   })
 );
 const PORT = process.env.PORT || 3000;
@@ -25,7 +26,7 @@ app.post("/checkout", async (req, res) => {
     success_url: body.success_url,
     cancel_url: body.cancel_url,
   });
-  res.json({ url: session.url });
+  res.status(200).json({ url: session.url });
 });
 
 app.get("/getPrice", async (req, res) => {
