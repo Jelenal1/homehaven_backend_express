@@ -23,8 +23,8 @@ app.post("/checkout", async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: "http://localhost:3000",
-    cancel_url: "http://localhost:3000",
+    success_url: body.succes_url,
+    cancel_url: body.cancel_url,
   });
   res.status(200).json({ url: session.url });
 });
